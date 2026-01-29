@@ -53,7 +53,8 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
 /* 광고 버튼 컨테이너 */
 .ad-container {
     display:flex;
-    justify-content: space-around; /* PC 가로형 */
+    justify-content:flex-start; /* 왼쪽부터 순서대로 나열 */
+    gap: 20px; /* 버튼 간격 */
     flex-wrap: wrap;
     margin-top:30px;
 }
@@ -68,7 +69,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
     border-radius:18px;
     font-weight:900;
     font-size:1.2rem;
-    background-color:white; /* 배경 흰색 */
+    background-color:white;
     text-decoration:none;
     box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     transition: transform 0.2s, box-shadow 0.2s;
@@ -79,14 +80,14 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
 }
 
 /* 광고 글자색 눈에 띄게 */
-.ad-button:nth-child(1) { color:#ff5722; }  /* 주황 */
-.ad-button:nth-child(2) { color:#4caf50; }  /* 초록 */
-.ad-button:nth-child(3) { color:#2196f3; }  /* 파랑 */
+.ad-button:nth-child(1) { color:#ff5722; }
+.ad-button:nth-child(2) { color:#4caf50; }
+.ad-button:nth-child(3) { color:#2196f3; }
 
-/* 모바일 대응 */
+/* 모바일 대응: 세로형 */
 @media (max-width: 768px) {
-  .ad-container { flex-direction: column; align-items:center; }
-  .ad-button { width:80%; height:60px; font-size:1rem; margin:5px 0; }
+  .ad-container { flex-direction: column; align-items:center; gap:10px; }
+  .ad-button { width:80%; height:60px; font-size:1rem; }
 }
 
 /* 로고/Arch/툴바 강제 숨김 */
@@ -159,10 +160,10 @@ if st.button("분석하기"):
 # 광고 버튼 3개 카드형
 # =========================
 ads = [
-    {"id": "AD_001", "label": " 비윈코리아", "url": "https://uzu59.netlify.app/", "alert": False, "color": "#ff5722"},
-    {"id": "AD_002", "label": " 벳지", "url": "https://b88-et.com", "alert": True, 
+    {"id": "AD_001", "label": "✅ 비윈코리아", "url": "https://uzu59.netlify.app/", "alert": False, "color": "#ff5722"},
+    {"id": "AD_002", "label": "✅ 벳지", "url": "https://b88-et.com", "alert": True, 
      "message": "⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59", "color": "#4caf50"},
-    {"id": "AD_003", "label": " 캡스", "url": "https://caps-22.com", "alert": True, 
+    {"id": "AD_003", "label": "✅ 캡스", "url": "https://caps-22.com", "alert": True, 
      "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59", "color": "#2196f3"}
 ]
 
