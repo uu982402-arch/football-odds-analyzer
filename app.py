@@ -4,7 +4,7 @@ import uuid
 import streamlit.components.v1 as components
 
 # =========================
-# 🎨 GLOBAL STYLE + UI 업그레이드 + 로고/Arch/툴바 숨김
+# 🎨 GLOBAL STYLE + UI 업그레이드
 # =========================
 st.markdown("""
 <style>
@@ -19,9 +19,9 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     margin-top: 20px;
     border: 2px solid #2a2f3a;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
-.result-text { font-size: 2rem; font-weight: 900; }  /* 진하게 */
+.result-text { font-size: 2rem; font-weight: 900; }  /* 결과 글자 진하게 */
 
 /* 결과 색상 */
 .super { color: #ff4d4d; }
@@ -34,9 +34,9 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     background: linear-gradient(90deg, #ff9800, #ff5722);
     color: #0d47a1;  /* 진한 파랑 */
     font-weight: 900;  /* 글자 진하게 */
-    padding: 12px 25px;
-    border-radius: 12px;
-    font-size: 1.2rem;  /* 글자 크기 키움 */
+    padding: 14px 30px;
+    border-radius: 16px;
+    font-size: 1.25rem;  /* 글자 크기 키움 */
     transition: transform 0.2s;
     width: 100%;
 }
@@ -48,20 +48,26 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 입력 필드 */
 input { background-color: #0e1117 !important; color: #ffffff !important; }
 
-/* 광고 버튼 통일 디자인 */
+/* 광고 버튼 디자인 */
 .ad-button {
-    padding:12px 24px; 
-    border-radius:12px; 
-    font-weight:900;  /* 글자 진하게 */
-    font-size:1.1rem; 
-    text-decoration:none; 
-    color:white; 
-    margin:5px; 
-    display:inline-block; 
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+    display:inline-block;
+    padding:16px 32px;
+    margin:10px;
+    border-radius:18px;  /* 둥근 사각형 */
+    font-weight:900;
+    font-size:1.15rem;
+    color:white;
+    text-decoration:none;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-.ad-button:hover { transform: scale(1.05); }
+.ad-button:hover { 
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+/* 광고 버튼 컨테이너 */
+.ad-container { text-align:center; display:flex; justify-content:center; flex-wrap:wrap; margin-top:30px; }
 
 /* 모바일 대응 */
 @media (max-width: 768px) {
@@ -69,6 +75,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
   h1 { font-size: 1.6rem; text-align: center; }
   input { font-size: 1rem; padding: 0.6rem; }
   .stButton>button { font-size: 1.05rem; width: 100%; }
+  .ad-button { font-size: 1rem; padding:12px 20px; margin:5px; }
 }
 
 /* 로고/Arch/툴바 강제 숨김 */
@@ -139,7 +146,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (B/C 안내창 components.html 사용)
+# 광고 버튼 3개 (components.html 사용, 안내창 포함)
 # =========================
 ads = [
     {"id": "AD_001", "label": "✅ 비윈코리아", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
@@ -149,7 +156,7 @@ ads = [
      "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
 ]
 
-st.markdown("<div style='text-align:center; margin-top:30px;'>", unsafe_allow_html=True)
+st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 
 for ad in ads:
     token = str(uuid.uuid4())
@@ -162,12 +169,12 @@ for ad in ads:
            class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """, height=60)
+        """, height=80)
     else:
         components.html(f"""
         <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """, height=60)
+        """, height=80)
 
-st.markdown("</div>", unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
