@@ -1,7 +1,7 @@
-import streamlit as stimport streamlit as st
+import streamlit as st
 
 # =========================
-# 🎨 GLOBAL STYLE + 로고/톱니바숨김
+# 🎨 GLOBAL STYLE + 로고/톱니바 숨김
 # =========================
 st.markdown("""
 <style>
@@ -123,8 +123,7 @@ if st.button("분석하기"):
 # 하단 광고 버튼 1개
 # =========================
 ad_url = "https://uzu59.netlify.app/a"
-st.markdown(
-    """
+st.markdown("""
 <div style="text-align:center; margin-top: 30px;">
     <a href='{}' target="_blank"
        style="
@@ -140,10 +139,4 @@ st.markdown(
        ✅ 보증업체 A
     </a>
 </div>
-""".format(ad_url),
-    unsafe_allow_html=True
-)
-
-
-
-
+""".format(ad_url), unsafe_allow_html=True)
