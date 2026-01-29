@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
+import streamlit.components.v1 as components
 
 # =========================
 # 🎨 GLOBAL STYLE + UI 개선
@@ -148,7 +149,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>',unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (좌→우, 안내창 포함)
+# 광고 버튼 3개 (PC/모바일 대응, 안내창 포함, 클릭 정상)
 # =========================
 ads=[
     {"id":"AD_001","label":" B WIN ","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
@@ -156,18 +157,21 @@ ads=[
     {"id":"AD_003","label":" CAPS","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
-st.markdown('<div class="ad-container">', unsafe_allow_html=True)
+ad_html = '<div class="ad-container">'
 for ad in ads:
-    token=str(uuid.uuid4())
-    ad_url=f"{ad['url']}?ad={ad['id']}&token={token}"
+    token = str(uuid.uuid4())
+    ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     if ad["alert"]:
-        msg=ad["message"].replace("'","\\'")
-        st.markdown(f"""
+        msg = ad["message"].replace("'","\\'")
+        ad_html += f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
-           class="ad-button {ad['class']}">{ad['label']}</a>
-        """, unsafe_allow_html=True)
+        class="ad-button {ad['class']}">{ad['label']}</a>
+        """
     else:
-        st.markdown(f"""
+        ad_html += f"""
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
-        """, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+        """
+ad_html += '</div>'
+
+# st.markdown 대신 components.html 사용 → alert + 새창 정상 동작
+components.html(ad_html, height=150, scrolling=False)
