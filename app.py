@@ -112,6 +112,9 @@ home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
 draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
 away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
 
+# =========================
+# 분석 버튼 & 카드 표시
+# =========================
 if st.button("분석하기"):
     result, logs = analyze_odds(home, draw, away)
 
@@ -126,7 +129,29 @@ if st.button("분석하기"):
     else:
         st.markdown(f"<div class='pass'>❌ PASS</div>", unsafe_allow_html=True)
 
+    # 로그 출력
     for l in logs:
         st.markdown(f"<div class='log'>• {l}</div>", unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+# =========================
+# 하단 광고 버튼
+# =========================
+ad_url = "https://example.com"  # 클릭 시 이동할 링크
+st.markdown(f"""
+<div style="text-align:center; margin-top: 30px;">
+    <a href="{ad_url}" target="_blank" 
+       style="
+       background-color:#ff9800;
+       color:white;
+       padding:12px 24px;
+       border-radius:10px;
+       font-weight:bold;
+       text-decoration:none;
+       font-size:1.05rem;
+       ">
+       ✅ 보증업체 바로가기
+    </a>
+</div>
+""", unsafe_allow_html=True)
