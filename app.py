@@ -128,12 +128,13 @@ if st.button("분석하기"):
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼 1개
+# 하단 광고 버튼 1개 (SyntaxError 방지)
 # =========================
 ad_url = "https://uzu59.netlify.app/a"
-st.markdown("""
+
+ad_html = f"""
 <div style="text-align:center; margin-top: 30px;">
-    <a href='{}' target="_blank"
+    <a href="{ad_url}" target="_blank"
        style="
        background-color:#ff9800;
        color:white;
@@ -144,10 +145,14 @@ st.markdown("""
        font-size:1.05rem;
        display:inline-block;
        ">
-       ✅ 보증업체 
+       ✅ 보증업체 A
     </a>
 </div>
-""".format(ad_url), unsafe_allow_html=True)
+"""
+
+st.markdown(ad_html, unsafe_allow_html=True)
+
+
 
 
 
