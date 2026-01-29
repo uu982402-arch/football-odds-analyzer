@@ -11,7 +11,7 @@ st.markdown("""
 html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-family:'Arial', sans-serif; }
 .block-container { padding:2rem; }
 
-/* 종목 선택 박스 제거 */
+/* 종목 선택 박스 주변 제거 */
 .css-1kyxreq.egzxvld1 { 
     background-color: transparent !important;
     border: none !important;
@@ -32,7 +32,7 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
 /* 입력 필드 */
 input { background-color:#0e1117 !important; color:#ffffff !important; padding:0.6rem; font-size:1rem; }
 
-/* 분석 버튼 */
+/* 분석 버튼 중앙 + 글자 진하게 */
 .stButton>button {
     background:linear-gradient(90deg,#ff9800,#ff5722);
     color:#0d47a1;
@@ -174,7 +174,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>',unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 + 클릭 로그
+# 광고 버튼 3개
 # =========================
 ads = [
     {"id":"AD_001","label":"B WIN","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
@@ -192,10 +192,6 @@ for ad in ads:
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
         class="ad-button {ad['class']}">{ad['label']}</a>
         """
-        # 클릭 로그 기록 (간단)
-        if "ad_clicks" not in st.session_state:
-            st.session_state.ad_clicks = []
-        st.session_state.ad_clicks.append({"ad":ad["id"], "time":datetime.now().isoformat()})
     else:
         ad_html += f"""
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
