@@ -145,9 +145,10 @@ ad_html = f"""
        font-size:1.05rem;
        display:inline-block;
        ">
-       ✅ 보증업체 1
+       ✅ 보증업체  
     </a>
 </div>
 """
 
 st.markdown(ad_html, unsafe_allow_html=True)
+
