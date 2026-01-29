@@ -1,7 +1,7 @@
 import streamlit as st
 
 # =========================
-# 🎨 GLOBAL STYLE (FINAL)
+# 🎨 GLOBAL STYLE + 로고 숨김
 # =========================
 st.markdown("""
 <style>
@@ -57,6 +57,9 @@ input {
   input { font-size: 1rem; padding: 0.6rem; }
   button { width: 100%; font-size: 1.05rem; }
 }
+
+/* 하단 Streamlit 로고 숨기기 */
+footer {display: none;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -66,38 +69,27 @@ input {
 def analyze_odds(home, draw, away):
     logs = []
 
-    # 1️⃣ 배당 기준 컷
     if min(home, away) < 1.60:
         logs.append("배당 1.60 미만 → 기준 미달")
         return "PASS", logs
 
-    # 2️⃣ 정배 판단
     fav = min(home, away)
     fav_side = "홈" if home < away else "원정"
-
     gap = abs(home - away)
 
-    # 3️⃣ 혼전 컷
     if gap < 0.25 and draw < 3.4:
         logs.append("홈/원정 배당 차이 미미 + 무 배당 낮음 → 혼전")
         return "PASS", logs
-
-    # 4️⃣ 초강승
     if fav <= 1.85 and draw >= 3.6 and gap >= 1.0:
         logs.append("저배당 안정 정배 + 무 방어 충분")
         return f"초강승 ({fav_side} 승)", logs
-
-    # 5️⃣ 강승
     if fav <= 2.05 and draw >= 3.4 and gap >= 0.7:
         logs.append("안정 정배 구조")
         return f"강승 ({fav_side} 승)", logs
-
-    # 6️⃣ 중승 (역배 포함 가능)
     if fav <= 2.40:
         logs.append("중배당 구간 → 변동성 존재")
         return f"중승 ({fav_side} 승)", logs
 
-    # 7️⃣ 그 외
     logs.append("구조 불명확")
     return "PASS", logs
 
@@ -105,7 +97,6 @@ def analyze_odds(home, draw, away):
 # 🖥 UI
 # =========================
 st.title("⚽ 88 배당 분석기 ")
-
 st.markdown("### 배당 입력")
 
 home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -120,6 +111,7 @@ if st.button("분석하기"):
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
+    # 결과 표시
     if "초강승" in result:
         st.markdown(f"<div class='super'>🔥 {result}</div>", unsafe_allow_html=True)
     elif "강승" in result:
@@ -129,19 +121,27 @@ if st.button("분석하기"):
     else:
         st.markdown(f"<div class='pass'>❌ PASS</div>", unsafe_allow_html=True)
 
-    # 로그 출력
-    for l in logs:
-        st.markdown(f"<div class='log'>• {l}</div>", unsafe_allow_html=True)
+    # 로그 접기(expander)
+    with st.expander("분석 로그 보기"):
+        for l in logs:
+            st.markdown(f"• {l}")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼
+# 하단 광고 버튼 4개
 # =========================
-ad_url = "https://uzu59.netlify.app/"  # 클릭 시 이동할 링크
-st.markdown(f"""
-<div style="text-align:center; margin-top: 30px;">
-    <a href="{ad_url}" target="_blank" 
+ads = [
+    {"label": "✅ 보증업체 A", "url": "https://uzu59.netlify.app/a"},
+    {"label": "✅ 보증업체 B", "url": "https://uzu59.netlify.app/b"},
+    {"label": "✅ 보증업체 C", "url": "https://uzu59.netlify.app/c"},
+    {"label": "✅ 보증업체 D", "url": "https://uzu59.netlify.app/"},
+]
+
+ad_html = '<div style="text-align:center; margin-top: 30px;">'
+for ad in ads:
+    ad_html += f"""
+    <a href="{ad['url']}" target="_blank"
        style="
        background-color:#ff9800;
        color:white;
@@ -150,10 +150,11 @@ st.markdown(f"""
        font-weight:bold;
        text-decoration:none;
        font-size:1.05rem;
+       margin:5px;
+       display:inline-block;
        ">
-       ✅ 보증업체 바로가기
+       {ad['label']}
     </a>
-</div>
-""", unsafe_allow_html=True)
-
-
+    """
+ad_html += '</div>'
+st.markdown(ad_html, unsafe_allow_html=True)
