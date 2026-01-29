@@ -20,7 +20,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.result-text { font-size: 1.9rem; font-weight: 800; }
+.result-text { font-size: 1.9rem; font-weight: 900; }  /* 글자 더 진하게 */
 
 /* 결과 색상 */
 .super { color: #ff4d4d; }
@@ -31,8 +31,8 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 분석 버튼 */
 .stButton>button {
     background: linear-gradient(90deg, #ff9800, #ff5722);
-    color: #2196f3;  /* 글자색 파랑 */
-    font-weight: 700;
+    color: #0d47a1;  /* 진한 파랑 */
+    font-weight: 900;  /* 글자 진하게 */
     padding: 12px 25px;
     border-radius: 12px;
     font-size: 1.1rem;
@@ -47,8 +47,20 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 입력 필드 */
 input { background-color: #0e1117 !important; color: #ffffff !important; }
 
-/* 광고 버튼 */
-.ad-button { padding:12px 24px; border-radius:12px; font-weight:bold; font-size:1.05rem; text-decoration:none; color:white; margin:5px; display:inline-block; }
+/* 광고 버튼 통일 디자인 */
+.ad-button {
+    padding:12px 24px; 
+    border-radius:12px; 
+    font-weight:900;  /* 글자 진하게 */
+    font-size:1.05rem; 
+    text-decoration:none; 
+    color:white; 
+    margin:5px; 
+    display:inline-block; 
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.ad-button:hover { transform: scale(1.05); }
 
 /* 모바일 대응 */
 @media (max-width: 768px) {
