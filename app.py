@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import uuid
 
 # =========================
-# 🎨 프로 UI 스타일
+# 🎨 프로 UI 스타일 + 광고/버튼/카드/종목선택 박스 개선
 # =========================
 st.markdown("""
 <style>
@@ -13,6 +13,15 @@ html, body, [class*="css"] {
     font-family:'Arial', sans-serif;
 }
 .block-container { padding:2rem; }
+
+/* 종목 선택 박스 배경/테두리 제거 */
+.css-1kyxreq.egzxvld1 {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
 /* 배당 입력 카드 */
 .input-card {
