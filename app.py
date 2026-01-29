@@ -28,7 +28,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 .mid { color: #ffd54f; }
 .pass { color: #9e9e9e; }
 
-/* 분석 버튼 */
+/* 분석 버튼 중앙 + 글자 진하게 */
 .stButton>button {
     background: linear-gradient(90deg, #ff9800, #ff5722);
     color: #0d47a1;
@@ -53,7 +53,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
 /* 광고 버튼 컨테이너 */
 .ad-container {
     display:flex;
-    justify-content: space-around;
+    justify-content: space-around; /* PC 가로형 */
     flex-wrap: wrap;
     margin-top:30px;
 }
@@ -68,7 +68,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
     border-radius:18px;
     font-weight:900;
     font-size:1.2rem;
-    color:white;
+    background-color:white; /* 배경 흰색 */
     text-decoration:none;
     box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     transition: transform 0.2s, box-shadow 0.2s;
@@ -78,12 +78,14 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
     box-shadow: 0 10px 20px rgba(0,0,0,0.6);
 }
 
+/* 광고 글자색 눈에 띄게 */
+.ad-button:nth-child(1) { color:#ff5722; }  /* 주황 */
+.ad-button:nth-child(2) { color:#4caf50; }  /* 초록 */
+.ad-button:nth-child(3) { color:#2196f3; }  /* 파랑 */
+
 /* 모바일 대응 */
 @media (max-width: 768px) {
-  .block-container { padding: 1rem; }
-  h1 { font-size: 1.6rem; text-align: center; }
-  input { font-size: 1rem; padding: 0.6rem; }
-  .stButton>button { font-size: 1.05rem; }
+  .ad-container { flex-direction: column; align-items:center; }
   .ad-button { width:80%; height:60px; font-size:1rem; margin:5px 0; }
 }
 
@@ -107,7 +109,7 @@ sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
 st.markdown(f"### {sport} 배당 입력")
 
 # =========================
-# 배당 입력 UI
+# 배당 입력
 # =========================
 if sport in ["축구", "하키"]:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -138,7 +140,6 @@ def analyze_odds(home, draw, away, sport="축구"):
     fav = min(home, away)
     fav_side = "홈" if home < away else "원정"
     gap = abs(home - away)
-
     if min(home, away) < 1.60: return "PASS", "pass"
     if sport in ["축구", "하키"] and gap < 0.25 and draw < 3.4: return "PASS", "pass"
     if fav <= 1.85 and (draw >= 3.6 or sport != "축구") and gap >= 1.0: return f"초강승 ({fav_side} 승)", "super"
@@ -158,11 +159,11 @@ if st.button("분석하기"):
 # 광고 버튼 3개 카드형
 # =========================
 ads = [
-    {"id": "AD_001", "label": "✅ 비윈코리아", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
-    {"id": "AD_002", "label": "✅ 벳지", "color": "#4caf50", "url": "https://b88-et.com", 
-     "alert": True, "message": "⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59"},
-    {"id": "AD_003", "label": "✅ 캡스", "color": "#2196f3", "url": "https://caps-22.com", 
-     "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
+    {"id": "AD_001", "label": " 비윈코리아", "url": "https://uzu59.netlify.app/", "alert": False, "color": "#ff5722"},
+    {"id": "AD_002", "label": " 벳지", "url": "https://b88-et.com", "alert": True, 
+     "message": "⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59", "color": "#4caf50"},
+    {"id": "AD_003", "label": " 캡스", "url": "https://caps-22.com", "alert": True, 
+     "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59", "color": "#2196f3"}
 ]
 
 st.markdown('<div class="ad-container">', unsafe_allow_html=True)
@@ -170,16 +171,15 @@ st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
-    
     if ad["alert"]:
         msg = ad["message"].replace("'", "\\'")
         st.markdown(f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}', '_blank'); return false;" 
-           class="ad-button" style="background-color:{ad['color']}">{ad['label']}</a>
+           class="ad-button" style="background-color:white; color:{ad['color']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-        <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">{ad['label']}</a>
+        <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:white; color:{ad['color']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
