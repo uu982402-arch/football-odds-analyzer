@@ -1,0 +1,9 @@
+mkdir football-odds-analyzer
+cd football-odds-analyzer
+# app.py, requirements.txt, README.md 파일 추가
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/사용자명/football-odds-analyzer.git
+git push -u origin main
