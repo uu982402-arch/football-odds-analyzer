@@ -4,7 +4,7 @@ import uuid
 import streamlit.components.v1 as components
 
 # =========================
-# 🎨 GLOBAL STYLE + UI 업그레이드
+# 🎨 GLOBAL STYLE + UI
 # =========================
 st.markdown("""
 <style>
@@ -33,10 +33,10 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 .stButton>button {
     background: linear-gradient(90deg, #ff9800, #ff5722);
     color: #0d47a1;  /* 진한 파랑 */
-    font-weight: 900;  /* 글자 진하게 */
+    font-weight: 900;  
     padding: 14px 30px;
     border-radius: 16px;
-    font-size: 1.25rem;  /* 글자 크기 키움 */
+    font-size: 1.25rem;  
     transition: transform 0.2s;
     width: 100%;
 }
@@ -48,17 +48,20 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 입력 필드 */
 input { background-color: #0e1117 !important; color: #ffffff !important; }
 
-/* 광고 버튼 디자인 */
+/* 광고 버튼 카드형 디자인 */
 .ad-button {
-    display:inline-block;
-    padding:16px 32px;
-    margin:10px;
-    border-radius:18px;  /* 둥근 사각형 */
+    display:block;
+    text-align:center;
+    border-radius:18px;
     font-weight:900;
-    font-size:1.15rem;
+    font-size:1.2rem;
     color:white;
     text-decoration:none;
     box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    padding:20px 0;
+    width:200px;
+    height:80px;
+    line-height:80px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .ad-button:hover { 
@@ -75,7 +78,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
   h1 { font-size: 1.6rem; text-align: center; }
   input { font-size: 1rem; padding: 0.6rem; }
   .stButton>button { font-size: 1.05rem; width: 100%; }
-  .ad-button { font-size: 1rem; padding:12px 20px; margin:5px; }
+  .ad-button { width: 100%; height:60px; line-height:60px; font-size:1rem; margin:5px; }
 }
 
 /* 로고/Arch/툴바 강제 숨김 */
@@ -146,7 +149,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (components.html 사용, 안내창 포함)
+# 광고 버튼 3개 (카드형 UI + 안내창)
 # =========================
 ads = [
     {"id": "AD_001", "label": "✅ 비윈코리아", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
@@ -169,12 +172,12 @@ for ad in ads:
            class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """, height=80)
+        """, height=90)
     else:
         components.html(f"""
         <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """, height=80)
+        """, height=90)
 
 st.markdown('</div>', unsafe_allow_html=True)
