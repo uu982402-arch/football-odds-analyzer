@@ -4,11 +4,15 @@ import uuid
 import streamlit.components.v1 as components
 
 # =========================
-# 🎨 프로 UI 스타일
+# 🎨 프로 UI 스타일 + 광고 버튼/배당 분석 완전 프로페셔널
 # =========================
 st.markdown("""
 <style>
-html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-family:'Arial', sans-serif; }
+html, body, [class*="css"] {
+    background-color:#0e1117; 
+    color:#e6e6e6; 
+    font-family:'Arial', sans-serif;
+}
 .block-container { padding:2rem; }
 
 /* 배당 입력 카드 */
@@ -22,7 +26,12 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
 }
 
 /* 입력 필드 */
-input { background-color:#0e1117 !important; color:#ffffff !important; padding:0.6rem; font-size:1rem; }
+input { 
+    background-color:#0e1117 !important; 
+    color:#ffffff !important; 
+    padding:0.6rem; 
+    font-size:1rem; 
+}
 
 /* 분석 버튼 */
 .stButton>button {
@@ -33,9 +42,9 @@ input { background-color:#0e1117 !important; color:#ffffff !important; padding:0
     border-radius:18px;
     font-size:1.3rem;
     display:block;
-    margin:20px auto;
+    margin:25px auto;
     width:50%;
-    min-width:200px;
+    min-width:220px;
     transition:transform 0.2s;
 }
 .stButton>button:hover { transform:scale(1.05); }
@@ -97,7 +106,7 @@ input { background-color:#0e1117 !important; color:#ffffff !important; padding:0
     .input-card { padding:20px; margin-bottom:20px; }
 }
 
-/* Streamlit 로고/Arch/툴바 숨김 */
+/* Streamlit 로고/Arch/툴바 강제 숨김 */
 header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"],
 [data-testid="collapsedControl"], [data-testid="stVerticalBlock"] > div:first-child {
     display:none !important;
@@ -113,15 +122,14 @@ header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration
 # 종목 선택
 # =========================
 st.markdown("## ⚽🏀🏒 전종목 배당 분석기")
-sport = st.selectbox("종목 선택", ["축구","농구","하키"])
+sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
 
 # =========================
 # 배당 입력 카드
 # =========================
 st.markdown('<div class="input-card">', unsafe_allow_html=True)
 st.markdown(f"### {sport} 배당 입력")
-
-if sport in ["축구","하키"]:
+if sport in ["축구", "하키"]:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
     draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
     away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -162,11 +170,11 @@ def analyze_odds(home, draw, away, sport="축구"):
 # =========================
 if st.button("분석하기"):
     check_rate_limit()
-    result_text,result_class = analyze_odds(home,draw,away,sport)
-    st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>',unsafe_allow_html=True)
+    result_text,result_class = analyze_odds(home, draw, away, sport)
+    st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개
+# 광고 버튼 3개 (프로 UI)
 # =========================
 ads = [
     {"id":"AD_001","label":"B WIN","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
@@ -182,7 +190,7 @@ for ad in ads:
         msg = ad["message"].replace("'","\\'")
         ad_html += f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
-        class="ad-button {ad['class']}">{ad['label']}</a>
+           class="ad-button {ad['class']}">{ad['label']}</a>
         """
     else:
         ad_html += f"""
