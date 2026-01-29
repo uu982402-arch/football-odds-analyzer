@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import uuid
 
 # =========================
-# 🎨 GLOBAL STYLE + 광고/분석 버튼 UI
+# 🎨 GLOBAL STYLE + UI 개선
 # =========================
 st.markdown("""
 <style>
@@ -30,7 +30,7 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
 .stButton>button {
     background:linear-gradient(90deg,#ff9800,#ff5722);
     color:#0d47a1;
-    font-weight:900;
+    font-weight:900 !important;
     padding:14px 30px;
     border-radius:16px;
     font-size:1.25rem;
@@ -41,10 +41,13 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
 }
 .stButton>button:hover { transform:scale(1.05); }
 
-/* 광고 버튼 컨테이너 */
+/* 입력 필드 */
+input { background-color:#0e1117 !important; color:#ffffff !important; }
+
+/* 광고 컨테이너 */
 .ad-container {
-    display:flex;
-    flex-direction:row;
+    display:flex !important;
+    flex-direction:row !important; /* PC 가로 */
     justify-content:flex-start;
     gap:20px;
     flex-wrap:wrap;
@@ -59,8 +62,8 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
     width:200px;
     height:80px;
     border-radius:18px;
-    font-weight:900;
-    font-size:1.2rem;
+    font-weight:900 !important;
+    font-size:1.2rem !important;
     background-color:white;
     text-decoration:none;
     box-shadow:0 6px 16px rgba(0,0,0,0.5);
@@ -73,10 +76,10 @@ html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-famil
 .ad-button.ad2 { color:#4caf50; }
 .ad-button.ad3 { color:#2196f3; }
 
-/* 모바일 대응 */
+/* 모바일 대응: 세로형 */
 @media (max-width:768px) {
-    .ad-container { flex-direction:column; align-items:center; gap:10px; }
-    .ad-button { width:80%; height:60px; font-size:1rem; }
+    .ad-container { flex-direction:column !important; align-items:center; gap:10px; }
+    .ad-button { width:80%; height:60px; font-size:1rem !important; }
 }
 
 /* Streamlit 로고/Arch/툴바 강제 숨김 */
@@ -148,9 +151,9 @@ if st.button("분석하기"):
 # 광고 버튼 3개
 # =========================
 ads=[
-    {"id":"AD_001","label":"✅ 비윈코리아","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
-    {"id":"AD_002","label":"✅ 벳지","url":"https://b88-et.com","alert":True,"message":"⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59","class":"ad2"},
-    {"id":"AD_003","label":"✅ 캡스","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
+    {"id":"AD_001","label":" 비윈코리아","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
+    {"id":"AD_002","label":" 벳지","url":"https://b88-et.com","alert":True,"message":"⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59","class":"ad2"},
+    {"id":"AD_003","label":" 캡스","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
 st.markdown('<div class="ad-container">', unsafe_allow_html=True)
@@ -161,10 +164,10 @@ for ad in ads:
         msg=ad["message"].replace("'","\\'")
         st.markdown(f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
-           class="ad-button {ad['class']}" style="background-color:white">{ad['label']}</a>
+           class="ad-button {ad['class']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-        <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}" style="background-color:white">{ad['label']}</a>
+        <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
