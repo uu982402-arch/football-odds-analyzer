@@ -1,7 +1,7 @@
-import streamlit as st
+import streamlit as stimport streamlit as st
 
 # =========================
-# 🎨 GLOBAL STYLE + 로고/톱니바 숨김
+# 🎨 GLOBAL STYLE + 로고/Arch 숨김 (모바일 포함)
 # =========================
 st.markdown("""
 <style>
@@ -46,11 +46,19 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
   button { width: 100%; font-size: 1.05rem; }
 }
 
-/* 하단 Streamlit 로고 숨김 */
-footer {display: none;}
+/* =========================
+   Streamlit 로고 및 Arch/톱니바 숨기기
+========================= */
+footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"] {
+    display: none !important;
+}
 
-/* 오른쪽 하단 톱니바 메뉴 숨김 */
-#MainMenu {visibility: hidden;}
+/* 모바일 전용도 동일하게 숨김 */
+@media (max-width: 768px) {
+    footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"] {
+        display: none !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -140,6 +148,5 @@ st.markdown("""
     </a>
 </div>
 """.format(ad_url), unsafe_allow_html=True)
-
 
 
