@@ -1,4 +1,4 @@
-import streamlit as stimport streamlit as st
+import streamlit as stimport streamlit as stimport streamlit as st
 from datetime import datetime, timedelta
 import uuid
 import streamlit.components.v1 as components
@@ -189,6 +189,6 @@ for ad in ads:
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
         """
 ad_html += '</div>'
-components.html(ad_html, height=220, scrolling=False)
+components.html(ad_html, height=250, scrolling=False)
 
 
