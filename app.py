@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as stimport streamlit as st
 from datetime import datetime, timedelta
 import uuid
 import streamlit.components.v1 as components
@@ -173,5 +173,7 @@ for ad in ads:
         """
 ad_html += '</div>'
 
-# st.markdown 대신 components.html 사용 → alert + 새창 정상 동작
+# components.html 사용 → alert + 새창 정상, UI 그대로 유지
 components.html(ad_html, height=150, scrolling=False)
+
+
