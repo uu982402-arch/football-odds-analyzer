@@ -1,4 +1,4 @@
-import streamlit as stimport streamlit as st
+import streamlit as st
 
 # =========================
 # 🎨 GLOBAL STYLE + 로고/Arch 숨김 (모바일 포함)
@@ -128,9 +128,9 @@ if st.button("분석하기"):
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼 1개 (SyntaxError 방지)
+# 하단 광고 버튼 1개 (SyntaxError 안전)
 # =========================
-ad_url = "https://uzu59.netlify.app/a"
+ad_url = "https://uzu59.netlify.app/1"
 
 ad_html = f"""
 <div style="text-align:center; margin-top: 30px;">
@@ -145,14 +145,9 @@ ad_html = f"""
        font-size:1.05rem;
        display:inline-block;
        ">
-       ✅ 보증업체 A
+       ✅ 보증업체 1
     </a>
 </div>
 """
 
 st.markdown(ad_html, unsafe_allow_html=True)
-
-
-
-
-
