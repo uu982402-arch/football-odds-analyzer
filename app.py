@@ -1,7 +1,6 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
-import streamlit.components.v1 as components
 
 # =========================
 # 🎨 GLOBAL STYLE + UI
@@ -21,7 +20,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     text-align: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
-.result-text { font-size: 2rem; font-weight: 900; }  /* 결과 글자 진하게 */
+.result-text { font-size: 2rem; font-weight: 900; }  
 
 /* 결과 색상 */
 .super { color: #ff4d4d; }
@@ -32,11 +31,11 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 분석 버튼 */
 .stButton>button {
     background: linear-gradient(90deg, #ff9800, #ff5722);
-    color: #0d47a1;  /* 진한 파랑 */
-    font-weight: 900;  
+    color: #0d47a1;
+    font-weight: 900;
     padding: 14px 30px;
     border-radius: 16px;
-    font-size: 1.25rem;  
+    font-size: 1.25rem;
     transition: transform 0.2s;
     width: 100%;
 }
@@ -48,20 +47,28 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
 /* 입력 필드 */
 input { background-color: #0e1117 !important; color: #ffffff !important; }
 
-/* 광고 버튼 카드형 디자인 */
+/* 광고 버튼 컨테이너 */
+.ad-container {
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:30px;
+    gap:15px;
+}
+
+/* 광고 버튼 카드형 */
 .ad-button {
-    display:block;
-    text-align:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:200px;
+    height:80px;
     border-radius:18px;
     font-weight:900;
     font-size:1.2rem;
     color:white;
     text-decoration:none;
     box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-    padding:20px 0;
-    width:200px;
-    height:80px;
-    line-height:80px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .ad-button:hover { 
@@ -69,16 +76,13 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
     box-shadow: 0 10px 20px rgba(0,0,0,0.6);
 }
 
-/* 광고 버튼 컨테이너 */
-.ad-container { text-align:center; display:flex; justify-content:center; flex-wrap:wrap; margin-top:30px; }
-
 /* 모바일 대응 */
 @media (max-width: 768px) {
   .block-container { padding: 1rem; }
   h1 { font-size: 1.6rem; text-align: center; }
   input { font-size: 1rem; padding: 0.6rem; }
   .stButton>button { font-size: 1.05rem; width: 100%; }
-  .ad-button { width: 100%; height:60px; line-height:60px; font-size:1rem; margin:5px; }
+  .ad-button { width:100%; height:60px; font-size:1rem; }
 }
 
 /* 로고/Arch/툴바 강제 숨김 */
@@ -113,7 +117,7 @@ else:  # 농구
     draw = 0
 
 # =========================
-# 분석 버튼 클릭 제한 (3초)
+# 클릭 제한
 # =========================
 if "last_click" not in st.session_state:
     st.session_state.last_click = datetime.min
@@ -149,7 +153,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (카드형 UI + 안내창)
+# 광고 버튼 3개 카드형
 # =========================
 ads = [
     {"id": "AD_001", "label": "✅ 비윈코리아", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
@@ -159,6 +163,7 @@ ads = [
      "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
 ]
 
+# 광고 컨테이너
 st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 
 for ad in ads:
@@ -166,18 +171,14 @@ for ad in ads:
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     
     if ad["alert"]:
-        message = ad["message"].replace("'", "\\'").replace("\n", "\\n")
-        components.html(f"""
-        <a href="#" onclick="alert('{message}'); window.open('{ad_url}', '_blank'); return false;"
-           class="ad-button" style="background-color:{ad['color']}">
-           {ad['label']}
-        </a>
-        """, height=90)
+        msg = ad["message"].replace("'", "\\'")
+        st.markdown(f"""
+        <a href="#" onclick="alert('{msg}'); window.open('{ad_url}', '_blank'); return false;" 
+           class="ad-button" style="background-color:{ad['color']}">{ad['label']}</a>
+        """, unsafe_allow_html=True)
     else:
-        components.html(f"""
-        <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">
-           {ad['label']}
-        </a>
-        """, height=90)
+        st.markdown(f"""
+        <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">{ad['label']}</a>
+        """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
