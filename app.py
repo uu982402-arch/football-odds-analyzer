@@ -20,7 +20,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     text-align: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
-.result-text { font-size: 2rem; font-weight: 900; }  
+.result-text { font-size: 2rem; font-weight: 900; }
 
 /* 결과 색상 */
 .super { color: #ff4d4d; }
@@ -37,6 +37,9 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     border-radius: 16px;
     font-size: 1.25rem;
     transition: transform 0.2s;
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
     width: 100%;
 }
 .stButton>button:hover { transform: scale(1.05); }
@@ -50,10 +53,9 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
 /* 광고 버튼 컨테이너 */
 .ad-container {
     display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
+    justify-content: space-around;
+    flex-wrap: wrap;
     margin-top:30px;
-    gap:15px;
 }
 
 /* 광고 버튼 카드형 */
@@ -81,8 +83,8 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
   .block-container { padding: 1rem; }
   h1 { font-size: 1.6rem; text-align: center; }
   input { font-size: 1rem; padding: 0.6rem; }
-  .stButton>button { font-size: 1.05rem; width: 100%; }
-  .ad-button { width:100%; height:60px; font-size:1rem; }
+  .stButton>button { font-size: 1.05rem; }
+  .ad-button { width:80%; height:60px; font-size:1rem; margin:5px 0; }
 }
 
 /* 로고/Arch/툴바 강제 숨김 */
@@ -163,7 +165,6 @@ ads = [
      "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
 ]
 
-# 광고 컨테이너
 st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 
 for ad in ads:
