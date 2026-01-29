@@ -1,20 +1,18 @@
-import streamlit as st
+import streamlit as stimport streamlit as st
 
 # =========================
-# 🎨 GLOBAL STYLE + 로고 숨김
+# 🎨 GLOBAL STYLE + 로고/톱니바숨김
 # =========================
 st.markdown("""
 <style>
-/* ===== 기본 ===== */
+/* ===== 기본 스타일 ===== */
 html, body, [class*="css"] {
     background-color: #0e1117;
     color: #e6e6e6;
 }
 
 /* 컨테이너 */
-.block-container {
-    padding: 2rem;
-}
+.block-container { padding: 2rem; }
 
 /* 카드 */
 .card {
@@ -32,25 +30,15 @@ html, body, [class*="css"] {
 .pass { color: #9e9e9e; font-weight: 600; }
 
 /* 버튼 */
-button {
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-}
+button { border-radius: 10px !important; font-weight: 700 !important; }
 
 /* 입력 */
-input {
-    background-color: #0e1117 !important;
-    color: #ffffff !important;
-}
+input { background-color: #0e1117 !important; color: #ffffff !important; }
 
 /* 로그 */
-.log {
-    font-size: 0.85rem;
-    color: #b0b0b0;
-    margin-top: 6px;
-}
+.log { font-size: 0.85rem; color: #b0b0b0; margin-top: 6px; }
 
-/* ===== 모바일 ===== */
+/* 모바일 */
 @media (max-width: 768px) {
   .block-container { padding: 1rem; }
   h1 { font-size: 1.6rem; text-align: center; }
@@ -58,13 +46,16 @@ input {
   button { width: 100%; font-size: 1.05rem; }
 }
 
-/* 하단 Streamlit 로고 숨기기 */
+/* 하단 Streamlit 로고 숨김 */
 footer {display: none;}
+
+/* 오른쪽 하단 톱니바 메뉴 숨김 */
+#MainMenu {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# 🧠 ANALYSIS LOGIC
+# 🧠 분석 로직
 # =========================
 def analyze_odds(home, draw, away):
     logs = []
@@ -94,7 +85,7 @@ def analyze_odds(home, draw, away):
     return "PASS", logs
 
 # =========================
-# 🖥 UI
+# UI
 # =========================
 st.title("⚽ 88 배당 분석기 ")
 st.markdown("### 배당 입력")
@@ -104,7 +95,7 @@ draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
 away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
 
 # =========================
-# 분석 버튼 & 카드 표시
+# 분석 버튼 + 카드
 # =========================
 if st.button("분석하기"):
     result, logs = analyze_odds(home, draw, away)
@@ -129,19 +120,12 @@ if st.button("분석하기"):
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼 4개
+# 하단 광고 버튼 1개
 # =========================
-ads = [
-    {"label": "✅ 보증업체 A", "url": "https://uzu59.netlify.app/a"},
-    {"label": "✅ 보증업체 B", "url": "https://uzu59.netlify.app/b"},
-    {"label": "✅ 보증업체 C", "url": "https://uzu59.netlify.app/c"},
-    {"label": "✅ 보증업체 D", "url": "https://uzu59.netlify.app/"},
-]
-
-ad_html = '<div style="text-align:center; margin-top: 30px;">'
-for ad in ads:
-    ad_html += f"""
-    <a href="{ad['url']}" target="_blank"
+ad_url = "https://example.com/a"
+st.markdown(f"""
+<div style="text-align:center; margin-top: 30px;">
+    <a href="{ad_url}" target="_blank"
        style="
        background-color:#ff9800;
        color:white;
@@ -150,11 +134,11 @@ for ad in ads:
        font-weight:bold;
        text-decoration:none;
        font-size:1.05rem;
-       margin:5px;
        display:inline-block;
        ">
-       {ad['label']}
+       ✅ 보증업체 A
     </a>
-    """
-ad_html += '</div>'
-st.markdown(ad_html, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
+
+
