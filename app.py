@@ -136,12 +136,20 @@ if st.button("분석하기"):
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼
+# 하단 광고 버튼 4개
 # =========================
-ad_url = "https://example.com"  # 클릭 시 이동할 링크
-st.markdown(f"""
-<div style="text-align:center; margin-top: 30px;">
-    <a href="{ad_url}" target="_blank" 
+ads = [
+    {"label": "✅ 비윈코리아 A", "url": "https://uzu59.netlify.app/a"},
+    {"label": "✅ 보증업체 B", "url": "https://uzu59.netlify.app/b"},
+    {"label": "✅ 보증업체 C", "url": "https://uzu59.netlify.app/c"},
+    {"label": "✅ 보증업체 D", "url": "https://uzu59.netlify.app/d"},
+]
+
+ad_html = '<div style="text-align:center; margin-top: 30px;">'
+
+for ad in ads:
+    ad_html += f"""
+    <a href="{ad['url']}" target="_blank"
        style="
        background-color:#ff9800;
        color:white;
@@ -150,8 +158,15 @@ st.markdown(f"""
        font-weight:bold;
        text-decoration:none;
        font-size:1.05rem;
+       margin:5px;
+       display:inline-block;
        ">
-       ✅ 보증업체 바로가기
+       {ad['label']}
     </a>
-</div>
-""", unsafe_allow_html=True)
+    """
+
+ad_html += '</div>'
+
+st.markdown(ad_html, unsafe_allow_html=True)
+
+
