@@ -1,9 +1,10 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
+import streamlit.components.v1 as components
 
 # =========================
-# 🎨 프로페셔널 UI 스타일
+# 🎨 프로 UI 스타일
 # =========================
 st.markdown("""
 <style>
@@ -11,36 +12,32 @@ html, body, [class*="css"] {
     background-color:#0e1117; 
     color:#e6e6e6; 
     font-family:'Arial', sans-serif;
-    margin:0;
-    padding:0;
 }
-.block-container { padding:2.5rem; max-width:980px; margin:auto; }
+.block-container { padding:2rem; }
 
-/* 종목 선택 박스 배경/테두리 제거 */
-.css-1kyxreq.egzxvld1 {
+/* 종목 선택 박스 투명 처리 (남색 박스 제거) */
+.css-1kyxreq.egzxvld0, .css-1f6l0j1 {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
 }
 
 /* 배당 입력 카드 */
 .input-card {
     background-color:#161b22;
-    border-radius:24px;
-    padding:32px 40px;
-    margin-bottom:40px;
+    border-radius:20px;
+    padding:25px 30px;
+    margin-bottom:30px;
     border:2px solid #2a2f3a;
-    box-shadow:0 10px 28px rgba(0,0,0,0.55);
+    box-shadow:0 6px 20px rgba(0,0,0,0.5);
 }
 
 /* 입력 필드 */
 input { 
     background-color:#0e1117 !important; 
     color:#ffffff !important; 
-    padding:0.8rem; 
-    font-size:1.05rem; 
+    padding:0.6rem; 
+    font-size:1rem; 
 }
 
 /* 분석 버튼 */
@@ -48,29 +45,28 @@ input {
     background:linear-gradient(90deg,#ff9800,#ff5722);
     color:#0d47a1;
     font-weight:900 !important;
-    padding:18px 40px;
-    border-radius:22px;
-    font-size:1.35rem;
+    padding:16px 35px;
+    border-radius:18px;
+    font-size:1.3rem;
     display:block;
-    margin:30px auto;
-    width:55%;
+    margin:25px auto;
+    width:50%;
     min-width:220px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.5);
-    transition: transform 0.25s, box-shadow 0.25s;
+    transition:transform 0.2s;
 }
-.stButton>button:hover { transform:scale(1.06); box-shadow:0 12px 28px rgba(0,0,0,0.6); }
+.stButton>button:hover { transform:scale(1.05); }
 
 /* 결과 카드 */
 .card {
     background-color:#161b22;
-    border-radius:22px;
-    padding:28px;
-    margin-top:30px;
+    border-radius:16px;
+    padding:24px;
+    margin-top:20px;
     border:2px solid #2a2f3a;
     text-align:center;
-    box-shadow:0 10px 28px rgba(0,0,0,0.55);
+    box-shadow:0 6px 20px rgba(0,0,0,0.5);
 }
-.result-text { font-size:2.2rem; font-weight:900; }
+.result-text { font-size:2rem; font-weight:900; }
 .super { color:#ff4d4d; }
 .strong { color:#ff9800; }
 .mid { color:#ffd54f; }
@@ -81,10 +77,10 @@ input {
     display:flex !important;
     flex-direction:row !important;
     justify-content:center;
-    gap:32px;
+    gap:25px;
     flex-wrap:wrap;
-    margin-top:50px;
-    margin-bottom:50px;
+    margin-top:40px;
+    margin-bottom:40px;
 }
 
 /* 광고 버튼 */
@@ -92,17 +88,17 @@ input {
     display:flex;
     justify-content:center;
     align-items:center;
-    width:240px;
-    height:100px;
-    border-radius:24px;
+    width:220px;
+    height:90px;
+    border-radius:20px;
     font-weight:900 !important;
-    font-size:1.35rem !important;
+    font-size:1.25rem !important;
     background-color:white;
     text-decoration:none;
-    box-shadow:0 12px 30px rgba(0,0,0,0.55);
-    transition:transform 0.25s, box-shadow 0.25s;
+    box-shadow:0 8px 20px rgba(0,0,0,0.5);
+    transition:transform 0.2s, box-shadow 0.2s;
 }
-.ad-button:hover { transform:translateY(-4px) scale(1.07); box-shadow:0 16px 36px rgba(0,0,0,0.6); }
+.ad-button:hover { transform:translateY(-4px) scale(1.05); box-shadow:0 12px 28px rgba(0,0,0,0.6); }
 
 /* 광고 글자색 */
 .ad-button.ad1 { color:#ff5722; }
@@ -111,10 +107,10 @@ input {
 
 /* 모바일 대응 */
 @media (max-width:768px) {
-    .ad-container { flex-direction:column !important; align-items:center; gap:20px; }
-    .ad-button { width:85%; height:80px; font-size:1.2rem !important; }
-    .stButton>button { width:80%; font-size:1.25rem; padding:16px 30px; }
-    .input-card { padding:25px 30px; margin-bottom:30px; }
+    .ad-container { flex-direction:column !important; align-items:center; gap:15px; }
+    .ad-button { width:80%; height:70px; font-size:1.1rem !important; }
+    .stButton>button { width:80%; font-size:1.2rem; padding:14px 25px; }
+    .input-card { padding:20px; margin-bottom:20px; }
 }
 
 /* Streamlit 로고/Arch/툴바 숨김 */
@@ -192,18 +188,19 @@ ads = [
     {"id":"AD_003","label":"CAPS","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
-st.markdown('<div class="ad-container">', unsafe_allow_html=True)
+ad_html = '<div class="ad-container">'
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     if ad["alert"]:
         msg = ad["message"].replace("'","\\'")
-        st.markdown(f"""
+        ad_html += f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
            class="ad-button {ad['class']}">{ad['label']}</a>
-        """, unsafe_allow_html=True)
+        """
     else:
-        st.markdown(f"""
+        ad_html += f"""
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
-        """, unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+        """
+ad_html += '</div>'
+components.html(ad_html, height=250, scrolling=False)
