@@ -130,7 +130,7 @@ if st.button("분석하기"):
 # =========================
 # 하단 광고 버튼 1개
 # =========================
-ad_url = "https://uzu59.netlify.app/"
+ad_url = "https://uzu59.netlify.app/a"
 st.markdown("""
 <div style="text-align:center; margin-top: 30px;">
     <a href='{}' target="_blank"
@@ -148,5 +148,6 @@ st.markdown("""
     </a>
 </div>
 """.format(ad_url), unsafe_allow_html=True)
+
 
 
