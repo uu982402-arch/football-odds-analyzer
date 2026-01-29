@@ -154,21 +154,6 @@ st.markdown(f"""
        ✅ 보증업체 바로가기
     </a>
 </div>
-ad_url = "https://uzu59.netlify.app/"  # 클릭 시 이동할 링크
-st.markdown(f"""
-<div style="text-align:center; margin-top: 30px;">
-    <a href="{ad_url}" target="_blank" 
-       style="
-       background-color:#ff9800;
-       color:white;
-       padding:12px 24px;
-       border-radius:10px;
-       font-weight:bold;
-       text-decoration:none;
-       font-size:1.05rem;
-       ">
-       ✅ 보증업체2 바로가기
-    </a>
-</div>
 """, unsafe_allow_html=True)
+
 
