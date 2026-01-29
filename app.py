@@ -148,7 +148,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>',unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개
+# 광고 버튼 3개 (좌→우, 안내창 포함)
 # =========================
 ads=[
     {"id":"AD_001","label":" B WIN ","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
@@ -171,6 +171,3 @@ for ad in ads:
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
-
-
