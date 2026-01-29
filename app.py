@@ -1,10 +1,9 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
-import requests
 
 # =========================
-# 🎨 GLOBAL STYLE + 로고/Arch 숨김
+# 🎨 GLOBAL STYLE + 로고/Arch/툴바 강제 숨김
 # =========================
 st.markdown("""
 <style>
@@ -24,9 +23,24 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
   input { font-size: 1rem; padding: 0.6rem; }
   button { width: 100%; font-size: 1.05rem; }
 }
-footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important; }
+/* 로고/Arch/톱니바/툴바 강제 숨김 */
+header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"], 
+[data-testid="collapsedControl"], [data-testid="stVerticalBlock"] > div:first-child {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
 @media (max-width: 768px) {
-    footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important; }
+    header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"],
+    [data-testid="collapsedControl"], [data-testid="stVerticalBlock"] > div:first-child {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -45,22 +59,30 @@ if not st.session_state.is_admin:
             st.success("관리자 로그인 성공")
         else:
             st.error("비밀번호 틀림")
-            st.stop()  # 로그인 전 페이지 접근 차단
+            st.stop()
     else:
         st.stop()
 
 # =========================
-# 앱 UI
+# 종목 선택
 # =========================
-st.title("⚽ 88 배당 분석기 (관리자 모드)")
-st.markdown("### 배당 입력")
-
-home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
-draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
-away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
+sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
+st.markdown(f"### {sport} 배당 입력")
 
 # =========================
-# 봇/클릭 제한
+# 배당 입력 UI
+# =========================
+if sport in ["축구", "하키"]:
+    home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
+    draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
+    away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
+else:  # 농구
+    home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
+    away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
+    draw = 0  # 무승부 없음
+
+# =========================
+# 봇 클릭 제한
 # =========================
 if "last_click" not in st.session_state:
     st.session_state.last_click = datetime.min
@@ -75,7 +97,7 @@ def check_rate_limit():
 # =========================
 # 분석 로직
 # =========================
-def analyze_odds(home, draw, away):
+def analyze_odds(home, draw, away, sport="축구"):
     logs = []
     if min(home, away) < 1.60:
         logs.append("배당 1.60 미만 → 기준 미달")
@@ -83,13 +105,13 @@ def analyze_odds(home, draw, away):
     fav = min(home, away)
     fav_side = "홈" if home < away else "원정"
     gap = abs(home - away)
-    if gap < 0.25 and draw < 3.4:
+    if sport in ["축구", "하키"] and gap < 0.25 and draw < 3.4:
         logs.append("홈/원정 배당 차이 미미 + 무 배당 낮음 → 혼전")
         return "PASS", logs
-    if fav <= 1.85 and draw >= 3.6 and gap >= 1.0:
+    if fav <= 1.85 and (draw >= 3.6 or sport != "축구") and gap >= 1.0:
         logs.append("저배당 안정 정배 + 무 방어 충분")
         return f"초강승 ({fav_side} 승)", logs
-    if fav <= 2.05 and draw >= 3.4 and gap >= 0.7:
+    if fav <= 2.05 and (draw >= 3.4 or sport != "축구") and gap >= 0.7:
         logs.append("안정 정배 구조")
         return f"강승 ({fav_side} 승)", logs
     if fav <= 2.40:
@@ -103,9 +125,8 @@ def analyze_odds(home, draw, away):
 # =========================
 if st.button("분석하기"):
     check_rate_limit()
-    result, logs = analyze_odds(home, draw, away)
+    result, logs = analyze_odds(home, draw, away, sport=sport)
     st.markdown('<div class="card">', unsafe_allow_html=True)
-
     if "초강승" in result:
         st.markdown(f"<div class='super'>🔥 {result}</div>", unsafe_allow_html=True)
     elif "강승" in result:
@@ -114,15 +135,13 @@ if st.button("분석하기"):
         st.markdown(f"<div class='mid'>⚠ {result}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='pass'>❌ PASS</div>", unsafe_allow_html=True)
-
     with st.expander("분석 로그 보기"):
         for l in logs:
             st.markdown(f"• {l}")
-
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼 + 클릭 토큰
+# 하단 광고 버튼 + 랜덤 클릭 토큰
 # =========================
 ad_id = "AD_001"
 click_token = str(uuid.uuid4())
