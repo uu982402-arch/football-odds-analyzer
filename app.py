@@ -46,24 +46,6 @@ header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration
 """, unsafe_allow_html=True)
 
 # =========================
-# 관리자 로그인
-# =========================
-if "is_admin" not in st.session_state:
-    st.session_state.is_admin = False
-
-if not st.session_state.is_admin:
-    pwd = st.text_input("관리자 비밀번호 입력", type="password")
-    if pwd:
-        if pwd == st.secrets["ADMIN_PASSWORD"]:
-            st.session_state.is_admin = True
-            st.success("관리자 로그인 성공")
-        else:
-            st.error("비밀번호 틀림")
-            st.stop()
-    else:
-        st.stop()
-
-# =========================
 # 종목 선택
 # =========================
 sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
@@ -82,7 +64,7 @@ else:  # 농구
     draw = 0  # 무승부 없음
 
 # =========================
-# 봇 클릭 제한
+# 분석 버튼 클릭 제한 (3초)
 # =========================
 if "last_click" not in st.session_state:
     st.session_state.last_click = datetime.min
@@ -141,10 +123,10 @@ if st.button("분석하기"):
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =========================
-# 하단 광고 버튼 + 랜덤 클릭 토큰
+# 하단 광고 버튼 (클릭 제한 없음, 랜덤 토큰 포함)
 # =========================
 ad_id = "AD_001"
-click_token = str(uuid.uuid4())
+click_token = str(uuid.uuid4())  # 랜덤 토큰 생성
 ad_url = f"https://uzu59.netlify.app/?ad={ad_id}&token={click_token}"
 
 ad_html = f"""
