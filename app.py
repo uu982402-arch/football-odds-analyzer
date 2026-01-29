@@ -1,9 +1,10 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
+import streamlit.components.v1 as components
 
 # =========================
-# 🎨 GLOBAL STYLE + UI 업그레이드 + 로고/Arch/툴바 강제 숨김
+# 🎨 GLOBAL STYLE + UI 업그레이드 + 로고/Arch/툴바 숨김
 # =========================
 st.markdown("""
 <style>
@@ -20,7 +21,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.result-text { font-size: 1.9rem; font-weight: 900; }  /* 글자 더 진하게 */
+.result-text { font-size: 2rem; font-weight: 900; }  /* 진하게 */
 
 /* 결과 색상 */
 .super { color: #ff4d4d; }
@@ -35,7 +36,7 @@ html, body, [class*="css"] { background-color: #0e1117; color: #e6e6e6; font-fam
     font-weight: 900;  /* 글자 진하게 */
     padding: 12px 25px;
     border-radius: 12px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;  /* 글자 크기 키움 */
     transition: transform 0.2s;
     width: 100%;
 }
@@ -52,7 +53,7 @@ input { background-color: #0e1117 !important; color: #ffffff !important; }
     padding:12px 24px; 
     border-radius:12px; 
     font-weight:900;  /* 글자 진하게 */
-    font-size:1.05rem; 
+    font-size:1.1rem; 
     text-decoration:none; 
     color:white; 
     margin:5px; 
@@ -138,7 +139,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (B/C 안내창)
+# 광고 버튼 3개 (B/C 안내창 components.html 사용)
 # =========================
 ads = [
     {"id": "AD_001", "label": "✅ 비윈코리아", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
@@ -148,31 +149,25 @@ ads = [
      "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
 ]
 
-ad_html = '<div style="text-align:center; margin-top: 30px;">'
+st.markdown("<div style='text-align:center; margin-top:30px;'>", unsafe_allow_html=True)
 
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     
     if ad["alert"]:
-        # JS alert 문자열 안전하게 처리
         message = ad["message"].replace("'", "\\'").replace("\n", "\\n")
-        ad_html += f"""
-        <a href="#" onclick="
-            alert('{message}');
-            window.open('{ad_url}', '_blank');
-            return false;"
-           class="ad-button"
-           style="background-color:{ad['color']}">
+        components.html(f"""
+        <a href="#" onclick="alert('{message}'); window.open('{ad_url}', '_blank'); return false;"
+           class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """
+        """, height=60)
     else:
-        ad_html += f"""
+        components.html(f"""
         <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
-        """
+        """, height=60)
 
-ad_html += '</div>'
-st.markdown(ad_html, unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
