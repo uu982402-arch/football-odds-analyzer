@@ -1,151 +1,132 @@
 import streamlit as st
 
-# ===============================
-# PAGE
-# ===============================
-st.set_page_config(
-    page_title="🔥 전종목 진심모드 FINAL",
-    layout="centered"
-)
-
-# ===============================
-# CSS – 완전 고정판
-# ===============================
+# =========================
+# 🎨 GLOBAL STYLE (FINAL)
+# =========================
 st.markdown("""
 <style>
+/* ===== 기본 ===== */
 html, body, [class*="css"] {
-    background-color: #0f172a !important;
-    color: #e5e7eb !important;
+    background-color: #0e1117;
+    color: #e6e6e6;
 }
-input, select, textarea {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    border-radius: 6px !important;
+
+/* 컨테이너 */
+.block-container {
+    padding: 2rem;
 }
-div[data-baseweb="select"] * {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-}
-label {
-    color: #e5e7eb !important;
-    font-weight: 600;
-}
+
+/* 카드 */
 .card {
-    background-color: #020617;
-    border: 2px solid #334155;
+    background-color: #161b22;
     border-radius: 14px;
     padding: 18px;
-    margin-top: 18px;
+    margin-top: 16px;
+    border: 1px solid #2a2f3a;
 }
-.pass { color: #f87171; font-weight: 800; }
-.mid { color: #facc15; font-weight: 800; }
-.strong { color: #22c55e; font-weight: 800; }
-.super { color: #38bdf8; font-weight: 900; }
+
+/* 등급 강조 */
+.super { color: #ff4d4d; font-weight: 800; }
+.strong { color: #ff9800; font-weight: 700; }
+.mid { color: #ffd54f; font-weight: 600; }
+.pass { color: #9e9e9e; font-weight: 600; }
+
+/* 버튼 */
+button {
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+}
+
+/* 입력 */
+input {
+    background-color: #0e1117 !important;
+    color: #ffffff !important;
+}
+
+/* 로그 */
 .log {
-    color: #94a3b8;
-    font-size: 14px;
-    margin-top: 4px;
+    font-size: 0.85rem;
+    color: #b0b0b0;
+    margin-top: 6px;
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 768px) {
+  .block-container { padding: 1rem; }
+  h1 { font-size: 1.6rem; text-align: center; }
+  input { font-size: 1rem; padding: 0.6rem; }
+  button { width: 100%; font-size: 1.05rem; }
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🔥 전종목 진심모드 FINAL")
-
-# ===============================
-# INPUT
-# ===============================
-with st.expander("📥 경기 정보 입력", expanded=True):
-    sport = st.selectbox("종목", ["축구", "농구", "하키"])
-
-    home = st.text_input("홈팀", placeholder="홈팀")
-    away = st.text_input("원정팀", placeholder="원정팀")
-
-    oh = st.number_input("홈 배당", min_value=1.01, step=0.01)
-    od = None
-    if sport != "농구":
-        od = st.number_input("무 배당", min_value=1.01, step=0.01)
-    oa = st.number_input("원정 배당", min_value=1.01, step=0.01)
-
-# ===============================
-# CORE LOGIC
-# ===============================
-def analyze(sport, oh, od, oa):
+# =========================
+# 🧠 ANALYSIS LOGIC
+# =========================
+def analyze_odds(home, draw, away):
     logs = []
 
-    # 1️⃣ 최소 배당 필터
-    if min(oh, oa) < 1.70:
-        logs.append("배당 1.70 미만 → 제외")
-        return "PASS", None, logs
+    # 1️⃣ 배당 기준 컷
+    if min(home, away) < 1.60:
+        logs.append("배당 1.60 미만 → 기준 미달")
+        return "PASS", logs
 
-    diff = abs(oh - oa)
+    # 2️⃣ 정배 판단
+    fav = min(home, away)
+    fav_side = "홈" if home < away else "원정"
 
-    # 2️⃣ 종목별 박빙 컷
-    if sport == "농구" and diff < 0.20:
-        logs.append("농구 박빙 배당 → PASS")
-        return "PASS", None, logs
-    if sport != "농구" and diff < 0.25:
-        logs.append("축구/하키 혼전 구간 → PASS")
-        return "PASS", None, logs
+    gap = abs(home - away)
 
-    # 3️⃣ 메인픽
-    if oh < oa:
-        pick = "홈팀 승"
-        base = oh
-        draw = od
+    # 3️⃣ 혼전 컷
+    if gap < 0.25 and draw < 3.4:
+        logs.append("홈/원정 배당 차이 미미 + 무 배당 낮음 → 혼전")
+        return "PASS", logs
+
+    # 4️⃣ 초강승
+    if fav <= 1.85 and draw >= 3.6 and gap >= 1.0:
+        logs.append("저배당 안정 정배 + 무 방어 충분")
+        return f"초강승 ({fav_side} 승)", logs
+
+    # 5️⃣ 강승
+    if fav <= 2.05 and draw >= 3.4 and gap >= 0.7:
+        logs.append("안정 정배 구조")
+        return f"강승 ({fav_side} 승)", logs
+
+    # 6️⃣ 중승 (역배 포함 가능)
+    if fav <= 2.40:
+        logs.append("중배당 구간 → 변동성 존재")
+        return f"중승 ({fav_side} 승)", logs
+
+    # 7️⃣ 그 외
+    logs.append("구조 불명확")
+    return "PASS", logs
+
+# =========================
+# 🖥 UI
+# =========================
+st.title("⚽ 88 배당 분석기 ")
+
+st.markdown("### 배당 입력")
+
+home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
+draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
+away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
+
+if st.button("분석하기"):
+    result, logs = analyze_odds(home, draw, away)
+
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+
+    if "초강승" in result:
+        st.markdown(f"<div class='super'>🔥 {result}</div>", unsafe_allow_html=True)
+    elif "강승" in result:
+        st.markdown(f"<div class='strong'>⚡ {result}</div>", unsafe_allow_html=True)
+    elif "중승" in result:
+        st.markdown(f"<div class='mid'>⚠ {result}</div>", unsafe_allow_html=True)
     else:
-        pick = "원정팀 승"
-        base = oa
-        draw = od
+        st.markdown(f"<div class='pass'>❌ PASS</div>", unsafe_allow_html=True)
 
-    # 4️⃣ 정배 과신 컷
-    if sport != "농구" and draw is not None and draw <= 3.40:
-        logs.append("무 배당 방어선 낮음 → 강승 불가")
-        return "중승", pick, logs
-
-    # 5️⃣ 초강승
-    if (
-        1.70 <= base <= 1.85 and
-        diff >= 1.30 and
-        (sport == "농구" or draw >= 3.60)
-    ):
-        logs.append("단폴급 구조 → 초강승")
-        return "초강승", pick, logs
-
-    # 6️⃣ 강승
-    if (
-        1.70 <= base <= 1.95 and
-        diff >= 0.60 and
-        (sport == "농구" or draw >= 3.30)
-    ):
-        logs.append("안정 정배 구조 → 강승")
-        return "강승", pick, logs
-
-    # 7️⃣ 중승
-    logs.append("우세는 있으나 확신 부족")
-    return "중승", pick, logs
-
-# ===============================
-# RUN
-# ===============================
-if st.button("🔍 분석 실행"):
-    grade, pick, logs = analyze(sport, oh, od, oa)
-
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-
-    if grade == "PASS":
-        st.markdown("<div class='pass'>❌ PASS</div>", unsafe_allow_html=True)
-    else:
-        cls = {
-            "초강승": "super",
-            "강승": "strong",
-            "중승": "mid"
-        }[grade]
-
-        st.markdown(f"<div class='{cls}'>✅ 메인픽: {pick}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='{cls}'>등급: {grade}</div>", unsafe_allow_html=True)
-
-    st.markdown("### 📋 분석 로그")
     for l in logs:
         st.markdown(f"<div class='log'>• {l}</div>", unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
