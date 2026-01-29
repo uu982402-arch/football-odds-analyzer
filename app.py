@@ -130,7 +130,7 @@ if st.button("분석하기"):
 # =========================
 # 하단 광고 버튼 1개 (SyntaxError 안전)
 # =========================
-ad_url = "https://uzu59.netlify.app/1"
+ad_url = "https://uzu59.netlify.app/"
 
 ad_html = f"""
 <div style="text-align:center; margin-top: 30px;">
@@ -151,4 +151,5 @@ ad_html = f"""
 """
 
 st.markdown(ad_html, unsafe_allow_html=True)
+
 
