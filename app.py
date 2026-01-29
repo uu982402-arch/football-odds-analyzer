@@ -1,38 +1,38 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
-import streamlit.components.v1 as components
 
 # =========================
-# 🎨 프로페셔널 UI 스타일
+# 🎨 프로 UI 스타일
 # =========================
 st.markdown("""
 <style>
-html, body, [class*="css"] { background-color:#0e1117; color:#e6e6e6; font-family:'Arial', sans-serif; }
-.block-container { padding:2rem; }
-
-/* 종목 선택 박스 주변 제거 */
-.css-1kyxreq.egzxvld1 { 
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
+html, body, [class*="css"] {
+    background-color:#0e1117; 
+    color:#e6e6e6; 
+    font-family:'Arial', sans-serif;
 }
+.block-container { padding:2rem; }
 
 /* 배당 입력 카드 */
 .input-card {
     background-color:#161b22;
     border-radius:20px;
-    padding:30px;
-    margin-bottom:25px;
+    padding:25px 30px;
+    margin-bottom:30px;
     border:2px solid #2a2f3a;
     box-shadow:0 6px 20px rgba(0,0,0,0.5);
 }
 
 /* 입력 필드 */
-input { background-color:#0e1117 !important; color:#ffffff !important; padding:0.6rem; font-size:1rem; }
+input { 
+    background-color:#0e1117 !important; 
+    color:#ffffff !important; 
+    padding:0.6rem; 
+    font-size:1rem; 
+}
 
-/* 분석 버튼 중앙 + 글자 진하게 */
+/* 분석 버튼 */
 .stButton>button {
     background:linear-gradient(90deg,#ff9800,#ff5722);
     color:#0d47a1;
@@ -41,9 +41,9 @@ input { background-color:#0e1117 !important; color:#ffffff !important; padding:0
     border-radius:18px;
     font-size:1.3rem;
     display:block;
-    margin:20px auto;
+    margin:25px auto;
     width:50%;
-    min-width:200px;
+    min-width:220px;
     transition:transform 0.2s;
 }
 .stButton>button:hover { transform:scale(1.05); }
@@ -75,7 +75,7 @@ input { background-color:#0e1117 !important; color:#ffffff !important; padding:0
     margin-bottom:40px;
 }
 
-/* 광고 버튼 카드형 */
+/* 광고 버튼 */
 .ad-button {
     display:flex;
     justify-content:center;
@@ -121,15 +121,13 @@ header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration
 # 종목 선택
 # =========================
 st.markdown("## ⚽🏀🏒 전종목 배당 분석기")
-sport = st.selectbox("종목 선택", ["축구","농구","하키"])
+sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
 
 # =========================
 # 배당 입력 카드
 # =========================
 st.markdown('<div class="input-card">', unsafe_allow_html=True)
-st.markdown(f"### {sport} 배당 입력")
-
-if sport in ["축구","하키"]:
+if sport in ["축구", "하키"]:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
     draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
     away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -170,8 +168,8 @@ def analyze_odds(home, draw, away, sport="축구"):
 # =========================
 if st.button("분석하기"):
     check_rate_limit()
-    result_text,result_class = analyze_odds(home,draw,away,sport)
-    st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>',unsafe_allow_html=True)
+    result_text,result_class = analyze_odds(home, draw, away, sport)
+    st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
 # 광고 버튼 3개
@@ -182,19 +180,18 @@ ads = [
     {"id":"AD_003","label":"CAPS","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
-ad_html = '<div class="ad-container">'
+st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     if ad["alert"]:
         msg = ad["message"].replace("'","\\'")
-        ad_html += f"""
+        st.markdown(f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
-        class="ad-button {ad['class']}">{ad['label']}</a>
-        """
+           class="ad-button {ad['class']}">{ad['label']}</a>
+        """, unsafe_allow_html=True)
     else:
-        ad_html += f"""
+        st.markdown(f"""
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
-        """
-ad_html += '</div>'
-components.html(ad_html, height=250, scrolling=False)
+        """, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
