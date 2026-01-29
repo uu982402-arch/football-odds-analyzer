@@ -1,10 +1,9 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import uuid
-import streamlit.components.v1 as components
 
 # =========================
-# 🎨 프로 UI 스타일 + 광고 버튼/배당 분석 완전 프로페셔널
+# 🎨 프로 UI 스타일
 # =========================
 st.markdown("""
 <style>
@@ -19,8 +18,8 @@ html, body, [class*="css"] {
 .input-card {
     background-color:#161b22;
     border-radius:20px;
-    padding:30px;
-    margin-bottom:25px;
+    padding:25px 30px;
+    margin-bottom:30px;
     border:2px solid #2a2f3a;
     box-shadow:0 6px 20px rgba(0,0,0,0.5);
 }
@@ -106,7 +105,7 @@ input {
     .input-card { padding:20px; margin-bottom:20px; }
 }
 
-/* Streamlit 로고/Arch/툴바 강제 숨김 */
+/* Streamlit 로고/Arch/툴바 숨김 */
 header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"],
 [data-testid="collapsedControl"], [data-testid="stVerticalBlock"] > div:first-child {
     display:none !important;
@@ -121,14 +120,13 @@ header, footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration
 # =========================
 # 종목 선택
 # =========================
-st.markdown("## ⚽🏀🏒 전종목 배당 분석기")
+st.markdown("## ⚽🏀🏒 88 배당 분석")
 sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
 
 # =========================
 # 배당 입력 카드
 # =========================
 st.markdown('<div class="input-card">', unsafe_allow_html=True)
-st.markdown(f"### {sport} 배당 입력")
 if sport in ["축구", "하키"]:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
     draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -174,7 +172,7 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 3개 (프로 UI)
+# 광고 버튼 3개
 # =========================
 ads = [
     {"id":"AD_001","label":"B WIN","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
@@ -182,19 +180,18 @@ ads = [
     {"id":"AD_003","label":"CAPS","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
-ad_html = '<div class="ad-container">'
+st.markdown('<div class="ad-container">', unsafe_allow_html=True)
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
     if ad["alert"]:
         msg = ad["message"].replace("'","\\'")
-        ad_html += f"""
+        st.markdown(f"""
         <a href="#" onclick="alert('{msg}'); window.open('{ad_url}','_blank'); return false;"
            class="ad-button {ad['class']}">{ad['label']}</a>
-        """
+        """, unsafe_allow_html=True)
     else:
-        ad_html += f"""
+        st.markdown(f"""
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
-        """
-ad_html += '</div>'
-components.html(ad_html, height=250, scrolling=False)
+        """, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
