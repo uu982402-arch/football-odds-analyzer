@@ -152,8 +152,8 @@ if st.button("분석하기"):
 # =========================
 ads=[
     {"id":"AD_001","label":" 비윈코리아","url":"https://uzu59.netlify.app/","alert":False,"class":"ad1"},
-    {"id":"AD_002","label":" 도메인명: 벳지 가입코드 : BANGU","url":"https://b88-et.com","alert":True,"message":"⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59","class":"ad2"},
-    {"id":"AD_003","label":" 도메인명: 캡스 가입코드 : RUST","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
+    {"id":"AD_002","label":" 도메인:벳지 가입코드 : BANGU","url":"https://b88-et.com","alert":True,"message":"⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59","class":"ad2"},
+    {"id":"AD_003","label":" 도메인:캡스 가입코드 : RUST","url":"https://caps-22.com","alert":True,"message":"⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59","class":"ad3"}
 ]
 
 st.markdown('<div class="ad-container">', unsafe_allow_html=True)
@@ -171,4 +171,5 @@ for ad in ads:
         <a href="{ad_url}" target="_blank" class="ad-button {ad['class']}">{ad['label']}</a>
         """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
+
 
