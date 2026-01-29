@@ -126,21 +126,27 @@ if st.button("분석하기"):
     st.markdown(f'<div class="card"><div class="result-text {result_class}">{result_text}</div></div>', unsafe_allow_html=True)
 
 # =========================
-# 광고 버튼 2개 (광고 B만 안내창)
+# 광고 버튼 3개 (광고 B만 안내창)
 # =========================
 ads = [
     {"id": "AD_001", "label": "✅ 비윈코리아 ", "color": "#ff9800", "url": "https://uzu59.netlify.app/", "alert": False},
-    {"id": "AD_002", "label": "✅ 벳지", "color": "#4caf50", "url": "https://b88-et.com/", "alert": True, "message": "⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59"}
+    {"id": "AD_002", "label": "✅ 벳지", "color": "#4caf50", "url": "https://b88-et.com", 
+     "alert": True, "message": "⚠ 안내: 도메인명: 벳지 가입코드 : BANGU 담당자:@UZU59"},
+    {"id": "AD_003", "label": "✅ 캡스", "color": "#2196f3", "url": "https://caps-22.com", 
+     "alert": True, "message": "⚠ 안내: 도메인명: 캡스 가입코드 : RUST 담당자:@UZU59"}
 ]
 
 ad_html = '<div style="text-align:center; margin-top: 30px;">'
+
 for ad in ads:
     token = str(uuid.uuid4())
     ad_url = f"{ad['url']}?ad={ad['id']}&token={token}"
-    if ad["alert"]:  # 안내창
+    
+    if ad["alert"]:
+        message = ad["message"].replace("'", "\\'").replace("\n", "\\n")
         ad_html += f"""
         <a href="#" onclick="
-            alert('{ad['message']}');
+            alert('{message}');
             window.open('{ad_url}', '_blank');
             return false;"
            class="ad-button"
@@ -148,12 +154,14 @@ for ad in ads:
            {ad['label']}
         </a>
         """
-    else:  # 바로 새 탭
+    else:
         ad_html += f"""
         <a href="{ad_url}" target="_blank" class="ad-button" style="background-color:{ad['color']}">
            {ad['label']}
         </a>
         """
+
 ad_html += '</div>'
 
 st.markdown(ad_html, unsafe_allow_html=True)
+
