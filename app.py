@@ -62,37 +62,6 @@ div[data-testid="stSelectbox"] + div:has(> div:empty) { display:none !important;
     box-shadow:0 8px 22px rgba(0,0,0,0.45);
 }
 
-/* ===== 분석 버튼 (완전 중앙 + 텍스트 정렬) ===== */
-div[data-testid="stButton"] { width:100% !important; }
-div[data-testid="stButton"] > div {
-    width:100% !important;
-    display:flex !important;
-    justify-content:center !important;
-}
-div[data-testid="stButton"] button {
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-
-    width:min(460px,85%) !important;
-    height:62px !important;
-
-    margin:22px auto 14px auto !important;
-    padding:0 !important;
-
-    background:linear-gradient(90deg,#ff9800,#ff5722) !important;
-    color:#111 !important;
-
-    font-size:1.35rem !important;
-    font-weight:900 !important;
-    letter-spacing:0.02em !important;
-
-    border:none !important;
-    border-radius:20px !important;
-    box-shadow:0 10px 26px rgba(0,0,0,0.45) !important;
-}
-div[data-testid="stButton"] button:hover { transform:scale(1.03); }
-
 /* ===== 결과 카드 ===== */
 .result-card {
     background:#161b22;
@@ -129,9 +98,72 @@ div[data-testid="stSelectbox"] div[role="combobox"] {
     border-radius:14px !important;
 }
 
+/* =========================
+   ✅ 분석 버튼 PRO UI (최종)
+   ========================= */
+div[data-testid="stButton"]{ width:100% !important; }
+div[data-testid="stButton"] > div{
+  width:100% !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+div[data-testid="stButton"] button{
+  width: min(520px, 92%) !important;
+  height: 68px !important;
+  padding: 0 22px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap: 10px !important;
+
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+
+  background:
+    radial-gradient(120% 180% at 20% 0%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%),
+    linear-gradient(90deg,#ff9800 0%, #ff6a00 45%, #ff2d55 100%) !important;
+
+  color: #0b0b0b !important;
+  font-size: 1.42rem !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.02em !important;
+
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.50),
+    inset 0 1px 0 rgba(255,255,255,0.25) !important;
+
+  margin: 24px auto 12px auto !important;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
+  text-align:center !important;
+}
+div[data-testid="stButton"] button:hover{
+  transform: translateY(-2px) scale(1.02) !important;
+  filter: brightness(1.02) !important;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,0.58),
+    inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}
+div[data-testid="stButton"] button:active{
+  transform: translateY(0px) scale(0.995) !important;
+  filter: brightness(0.99) !important;
+}
+div[data-testid="stButton"] button:focus{
+  outline: none !important;
+  box-shadow:
+    0 0 0 4px rgba(255,152,0,0.25),
+    0 16px 40px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
 /* 모바일 */
 @media (max-width:768px){
     .block-container { padding:1.6rem 1rem; }
+    div[data-testid="stButton"] button{
+        height:62px !important;
+        font-size:1.25rem !important;
+        width:min(520px,94%) !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -196,6 +228,7 @@ def analyze_odds(home, draw, away, sport="축구"):
 # =========================
 # ANALYZE BUTTON + RESULT
 # =========================
+# 텍스트는 원하는대로 바꿔도 됨: "분석하기" 유지
 if st.button("분석하기"):
     check_rate_limit()
     text, cls = analyze_odds(home, draw, away, sport)
@@ -206,8 +239,6 @@ if st.button("분석하기"):
 
 # =========================
 # ADS (버튼 3개 + 모달 + 모바일 세로 / PC 가로)
-#   - components.html 내부에 CSS 포함 (iframe이라 외부 CSS 안 먹음)
-#   - 모바일에서 3개 다 보이도록 height 충분히
 # =========================
 today_users = random.randint(72, 128)
 
@@ -255,7 +286,6 @@ ads_html = f"""
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="modal-title">⚠ 공식 보증업체 안내</div>
@@ -350,7 +380,6 @@ ads_html = f"""
     .ad-btn, .ad-link {{ width: 86vw; max-width: 360px; height: 76px; }}
   }}
 
-  /* 모달 */
   .modal-bg {{
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.65);
@@ -418,5 +447,5 @@ ads_html = f"""
 </script>
 """
 
-# ✅ 모바일 세로형에서도 3개 전부 보이도록 높이 넉넉히
+# 모바일 세로형에서도 3개 전부 보이도록 높이 넉넉히
 components.html(ads_html, height=640, scrolling=False)
