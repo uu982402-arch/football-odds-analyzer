@@ -237,7 +237,11 @@ today_users = random.randint(72, 128)
 ads = [
     {"id": "AD_001", "label": "보증업체",  "color": "#ff5722", "url": "https://uu982402-arch.github.io/uzu59.github.io/",
      "need_modal": False, "message": ""},
-   
+    {"id": "AD_002", "label": "BETZY",  "color": "#4caf50", "url": "https://b88-et.com",
+     "need_modal": True,  "message": "도메인: BETZY\\n가입코드: BANGU\\n담당자: @UZU59"},
+    {"id": "AD_003", "label": "CAPS",   "color": "#2196f3", "url": "https://caps-22.com",
+     "need_modal": True,  "message": "도메인: CAPS\\n가입코드: RUST\\n담당자: @UZU59"},
+]
 
 buttons_html = ""
 for ad in ads:
@@ -383,5 +387,6 @@ ads_html = f"""
 
 # ✅ 모바일에서도 광고 3개가 다 보이도록 충분한 높이
 components.html(ads_html, height=640, scrolling=False)
+
 
 
