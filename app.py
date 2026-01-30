@@ -4,35 +4,24 @@ import uuid
 import random
 import streamlit.components.v1 as components
 
-# =========================
-# Page config
-# =========================
 st.set_page_config(page_title=" 88 ", layout="centered")
 
-# =========================
-# GLOBAL UI (메인 페이지 CSS)
-# =========================
 st.markdown("""
 <style>
-/* 앱 전체 배경 강제 */
 [data-testid="stAppViewContainer"] { background: #0e1117; }
 html, body, .stApp {
     background-color:#0e1117 !important;
     color:#e6e6e6 !important;
     font-family: Arial, sans-serif;
 }
-
-/* 전체 폭/여백 */
 .block-container { padding: 2.2rem 1.2rem; max-width: 980px; margin: 0 auto; }
 
-/* 상단 Streamlit 요소 숨김 + 자리(높이)까지 제거 */
 [data-testid="stHeader"], header, footer, #MainMenu,
 [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="collapsedControl"] {
     display:none !important;
     height:0 !important;
 }
 
-/* 제목 */
 .main-title {
     text-align:center;
     font-size:2.4rem;
@@ -40,19 +29,16 @@ html, body, .stApp {
     margin: 0.2rem 0 0.6rem 0;
 }
 
-/* 종목 선택: 카드 느낌 제거 */
 [data-testid="stSelectbox"] > div {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-/* ✅ 종목선택-홈배당 사이 남색 긴 바 제거 */
 div[data-testid="stSelectbox"] + div:empty { display:none !important; }
 div[data-testid="stSelectbox"] + div > div:empty { display:none !important; }
 div[data-testid="stSelectbox"] + div:has(> div:empty) { display:none !important; }
 
-/* 배당 입력 카드 */
 .input-card {
     background:#161b22;
     border:1px solid #2a2f3a;
@@ -63,8 +49,12 @@ div[data-testid="stSelectbox"] + div:has(> div:empty) { display:none !important;
     box-shadow: 0 8px 22px rgba(0,0,0,0.45);
 }
 
-/* ✅ 분석 버튼 완전 중앙 */
-div[data-testid="stButton"] {
+/* ✅ 분석 버튼 완전 중앙(최종) */
+div[data-testid="stButton"]{
+  width:100% !important;
+}
+div[data-testid="stButton"] > div{
+  width:100% !important;
   display:flex !important;
   justify-content:center !important;
 }
@@ -80,10 +70,11 @@ div[data-testid="stButton"] {
     width: min(420px, 80%) !important;
     margin: 18px auto 10px auto !important;
     white-space: nowrap !important;
+    text-align:center !important;
+    display:block !important;
 }
 .stButton > button:hover { transform: scale(1.02); }
 
-/* 결과 카드 */
 .result-card {
     background:#161b22;
     border:1px solid #2a2f3a;
@@ -99,74 +90,45 @@ div[data-testid="stButton"] {
 .mid { color:#ffd54f; }
 .pass { color:#9e9e9e; }
 
-/* =========================
-   TYPOGRAPHY: 제목/광고 제외
-   ========================= */
 :root{
-  --t1: 1.02rem;     /* 기본 텍스트 */
-  --t2: 0.92rem;     /* 라벨/보조 */
-  --t3: 1.08rem;     /* 입력값 */
+  --t1: 1.02rem;
+  --t2: 0.92rem;
+  --t3: 1.08rem;
 }
-
-/* 라벨(종목 선택, 홈배당 등) */
 label, .stNumberInput label, .stSelectbox label {
   font-size: var(--t2) !important;
   font-weight: 800 !important;
   color: #cfcfcf !important;
 }
-
-/* selectbox 텍스트 */
 div[data-testid="stSelectbox"] * {
   font-size: var(--t1) !important;
   font-weight: 800 !important;
 }
-
-/* number input 값(숫자) */
 div[data-testid="stNumberInput"] input {
   font-size: var(--t3) !important;
   font-weight: 900 !important;
 }
-
-/* 입력 박스 높이/둥글기 통일 */
 div[data-testid="stNumberInput"] input,
 div[data-testid="stSelectbox"] div[role="combobox"] {
   border-radius: 14px !important;
   min-height: 46px !important;
 }
-
-/* 위젯 간격 정리 */
 div[data-testid="stNumberInput"],
 div[data-testid="stSelectbox"] {
   margin-bottom: 10px !important;
 }
-
-/* 모바일에서는 살짝 타이트하게 */
 @media (max-width:768px){
-  :root{
-    --t1: 0.98rem;
-    --t2: 0.88rem;
-    --t3: 1.02rem;
-  }
+  :root{ --t1:0.98rem; --t2:0.88rem; --t3:1.02rem; }
   .block-container { padding: 1.6rem 1rem; }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# TITLE
-# =========================
 st.markdown('<div class="main-title">🦋 88 🦋</div>', unsafe_allow_html=True)
 
-# =========================
-# SPORT SELECT
-# =========================
 sport = st.selectbox("종목 선택", ["축구", "농구", "하키"])
 
-# =========================
-# INPUT CARD (배당 입력만 카드로)
-# =========================
 st.markdown('<div class="input-card">', unsafe_allow_html=True)
-
 if sport in ["축구", "하키"]:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
     draw = st.number_input("무 배당", min_value=1.01, step=0.01, format="%.2f")
@@ -175,12 +137,8 @@ else:
     home = st.number_input("홈 배당", min_value=1.01, step=0.01, format="%.2f")
     away = st.number_input("원정 배당", min_value=1.01, step=0.01, format="%.2f")
     draw = 0.0
-
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =========================
-# RATE LIMIT
-# =========================
 if "last_click" not in st.session_state:
     st.session_state.last_click = datetime.min
 
@@ -191,9 +149,6 @@ def check_rate_limit():
         st.stop()
     st.session_state.last_click = now
 
-# =========================
-# ANALYSIS LOGIC (유지)
-# =========================
 def analyze_odds(home, draw, away, sport="축구"):
     fav = min(home, away)
     fav_side = "홈" if home < away else "원정"
@@ -211,9 +166,6 @@ def analyze_odds(home, draw, away, sport="축구"):
         return f"중승 ({fav_side} 승)", "mid"
     return "PASS", "pass"
 
-# =========================
-# ANALYZE BUTTON + RESULT
-# =========================
 if st.button("분석하기"):
     check_rate_limit()
     result_text, result_class = analyze_odds(home, draw, away, sport)
@@ -222,9 +174,6 @@ if st.button("분석하기"):
         unsafe_allow_html=True
     )
 
-# =========================
-# ADS (iframe 내부 완전 독립 렌더 + 모바일 3번 보이게 높이 확보)
-# =========================
 today_users = random.randint(72, 128)
 
 ads = [
@@ -317,7 +266,6 @@ ads_html = f"""
   .ad-name {{ font-weight: 900; font-size: 1.22rem; line-height: 1.1; }}
   .ad-tip {{ margin-top: 6px; font-size: 0.78rem; font-weight: 800; color:#000000a8; }}
 
-  /* 모바일: 세로형 + 높이 충분 */
   @media (max-width: 720px) {{
     .ad-btn, .ad-link {{ width: 86vw; max-width: 360px; height: 76px; }}
   }}
@@ -372,5 +320,4 @@ ads_html = f"""
 </script>
 """
 
-# ✅ 모바일 세로형에서도 3개 다 보이도록 높이 넉넉히
 components.html(ads_html, height=580, scrolling=False)
