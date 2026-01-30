@@ -219,7 +219,7 @@ def analyze_odds(home, draw, away, sport="축구"):
 # =========================
 left, center, right = st.columns([1, 2, 1])
 with center:
-    clicked = st.button("분석")
+    clicked = st.button("분 석 실 행")
 
 if clicked:
     check_rate_limit()
@@ -387,6 +387,7 @@ ads_html = f"""
 
 # ✅ 모바일에서도 광고 3개가 다 보이도록 충분한 높이
 components.html(ads_html, height=640, scrolling=False)
+
 
 
 
