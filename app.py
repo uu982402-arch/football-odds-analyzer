@@ -40,7 +40,7 @@ html, body, .stApp {
     margin:0.4rem 0 0.8rem 0;
 }
 
-/* ===== 종목 선택 박스 스타일 정리 ===== */
+/* ===== 종목 선택 스타일 ===== */
 [data-testid="stSelectbox"] > div {
     background:transparent !important;
     border:none !important;
@@ -78,7 +78,7 @@ div[data-testid="stSelectbox"] + div:has(> div:empty) { display:none !important;
 .mid { color:#ffd54f; }
 .pass { color:#9e9e9e; }
 
-/* ===== 폰트/글자 크기 통일 ===== */
+/* ===== 폼 글자 크기/폰트 ===== */
 label {
     font-size:1.05rem !important;
     font-weight:800 !important;
@@ -99,70 +99,59 @@ div[data-testid="stSelectbox"] div[role="combobox"] {
 }
 
 /* =========================
-   ✅ 분석 버튼 PRO UI (최종)
+   ✅ 분석 버튼 PRO UI (안 깨지게)
+   - 핵심: .stButton>button 타겟
+   - 줄바꿈 방지
    ========================= */
-div[data-testid="stButton"]{ width:100% !important; }
-div[data-testid="stButton"] > div{
-  width:100% !important;
-  display:flex !important;
-  justify-content:center !important;
+.stButton > button {
+    width: 100% !important;             /* 가운데 컬럼에서 꽉 차게 */
+    max-width: 520px !important;
+    height: 66px !important;
+    padding: 0 22px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 18px !important;     /* pill 말고 둥근 사각(더 안정적) */
+    border: 1px solid rgba(255,255,255,0.14) !important;
+
+    background:
+      radial-gradient(120% 180% at 20% 0%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%),
+      linear-gradient(90deg,#ff9800 0%, #ff6a00 45%, #ff2d55 100%) !important;
+
+    color: #0b0b0b !important;
+    font-size: 1.45rem !important;
+    font-weight: 1000 !important;
+    letter-spacing: 0.02em !important;
+
+    white-space: nowrap !important;     /* ✅ '분석하기' 줄바꿈 방지 */
+    line-height: 1 !important;
+
+    box-shadow:
+      0 14px 34px rgba(0,0,0,0.50),
+      inset 0 1px 0 rgba(255,255,255,0.25) !important;
+
+    transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
 }
-div[data-testid="stButton"] button{
-  width: min(520px, 92%) !important;
-  height: 68px !important;
-  padding: 0 22px !important;
-
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap: 10px !important;
-
-  border-radius: 999px !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-
-  background:
-    radial-gradient(120% 180% at 20% 0%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%),
-    linear-gradient(90deg,#ff9800 0%, #ff6a00 45%, #ff2d55 100%) !important;
-
-  color: #0b0b0b !important;
-  font-size: 1.42rem !important;
-  font-weight: 1000 !important;
-  letter-spacing: 0.02em !important;
-
-  box-shadow:
-    0 14px 34px rgba(0,0,0,0.50),
-    inset 0 1px 0 rgba(255,255,255,0.25) !important;
-
-  margin: 24px auto 12px auto !important;
-  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
-  text-align:center !important;
+.stButton > button:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    filter: brightness(1.02) !important;
+    box-shadow:
+      0 18px 42px rgba(0,0,0,0.58),
+      inset 0 1px 0 rgba(255,255,255,0.28) !important;
 }
-div[data-testid="stButton"] button:hover{
-  transform: translateY(-2px) scale(1.02) !important;
-  filter: brightness(1.02) !important;
-  box-shadow:
-    0 18px 42px rgba(0,0,0,0.58),
-    inset 0 1px 0 rgba(255,255,255,0.28) !important;
-}
-div[data-testid="stButton"] button:active{
-  transform: translateY(0px) scale(0.995) !important;
-  filter: brightness(0.99) !important;
-}
-div[data-testid="stButton"] button:focus{
-  outline: none !important;
-  box-shadow:
-    0 0 0 4px rgba(255,152,0,0.25),
-    0 16px 40px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.25) !important;
+.stButton > button:active {
+    transform: translateY(0px) scale(0.995) !important;
+    filter: brightness(0.99) !important;
 }
 
 /* 모바일 */
 @media (max-width:768px){
     .block-container { padding:1.6rem 1rem; }
-    div[data-testid="stButton"] button{
+    .stButton > button{
         height:62px !important;
-        font-size:1.25rem !important;
-        width:min(520px,94%) !important;
+        font-size:1.28rem !important;
     }
 }
 </style>
@@ -226,10 +215,13 @@ def analyze_odds(home, draw, away, sport="축구"):
     return "PASS", "pass"
 
 # =========================
-# ANALYZE BUTTON + RESULT
+# ✅ 분석 버튼: 레이아웃으로 "완전 중앙" 강제
 # =========================
-# 텍스트는 원하는대로 바꿔도 됨: "분석하기" 유지
-if st.button("분석하기"):
+left, center, right = st.columns([1, 2, 1])
+with center:
+    clicked = st.button("분석하기")
+
+if clicked:
     check_rate_limit()
     text, cls = analyze_odds(home, draw, away, sport)
     st.markdown(
@@ -258,7 +250,7 @@ for ad in ads:
 
     if ad["need_modal"]:
         buttons_html += f"""
-        <button class="ad-btn" style="border-color:{ad['color']};" 
+        <button class="ad-btn" style="border-color:{ad['color']};"
                 title="공식 보증업체"
                 onclick="openModal('{ad_url}', `{ad['message']}`)">
             <div class="ad-name" style="color:{ad['color']};">{ad['label']}</div>
@@ -298,42 +290,14 @@ ads_html = f"""
 </div>
 
 <style>
-  body {{
-    margin:0; padding:0;
-    background:transparent;
-    font-family: Arial, sans-serif;
-  }}
+  body {{ margin:0; padding:0; background:transparent; font-family: Arial, sans-serif; }}
 
-  .ads-wrap {{
-    margin-top: 34px;
-    text-align:center;
-  }}
-  .line {{
-    color:#7a7a7a;
-    font-weight:800;
-    margin: 6px 0;
-  }}
-  .ads-title {{
-    color:#e6e6e6;
-    font-weight:900;
-    font-size: 1.55rem;
-    margin-top: 8px;
-  }}
-  .ads-desc {{
-    margin-top: 6px;
-    color:#bdbdbd;
-    font-weight:700;
-    font-size: 0.95rem;
-  }}
-  .ads-visit {{
-    margin-top: 6px;
-    color:#a9a9a9;
-    font-size: 0.9rem;
-  }}
-  .ads-visit b {{
-    color:#ffd54f;
-    font-weight:900;
-  }}
+  .ads-wrap {{ margin-top: 34px; text-align:center; }}
+  .line {{ color:#7a7a7a; font-weight:800; margin: 6px 0; }}
+  .ads-title {{ color:#e6e6e6; font-weight:900; font-size: 1.55rem; margin-top: 8px; }}
+  .ads-desc {{ margin-top: 6px; color:#bdbdbd; font-weight:700; font-size: 0.95rem; }}
+  .ads-visit {{ margin-top: 6px; color:#a9a9a9; font-size: 0.9rem; }}
+  .ads-visit b {{ color:#ffd54f; font-weight:900; }}
 
   .ads-row {{
     display:flex;
@@ -362,17 +326,8 @@ ads_html = f"""
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 16px 34px rgba(0,0,0,0.26);
   }}
-  .ad-name {{
-    font-weight: 900;
-    font-size: 1.22rem;
-    line-height: 1.1;
-  }}
-  .ad-sub {{
-    margin-top: 6px;
-    font-size: 0.78rem;
-    font-weight: 900;
-    color:#000000a8;
-  }}
+  .ad-name {{ font-weight: 900; font-size: 1.22rem; line-height: 1.1; }}
+  .ad-sub {{ margin-top: 6px; font-size: 0.78rem; font-weight: 900; color:#000000a8; }}
 
   /* 모바일: 세로형 */
   @media (max-width: 720px) {{
@@ -398,11 +353,7 @@ ads_html = f"""
     color: #e6e6e6;
     text-align: left;
   }}
-  .modal-title {{
-    font-size: 1.15rem;
-    font-weight: 900;
-    margin-bottom: 10px;
-  }}
+  .modal-title {{ font-size: 1.15rem; font-weight: 900; margin-bottom: 10px; }}
   .modal-text {{
     font-size: 0.98rem;
     color: #d6d6d6;
@@ -410,23 +361,10 @@ ads_html = f"""
     white-space: pre-line;
     margin-bottom: 14px;
   }}
-  .modal-actions {{
-    display:flex;
-    gap:10px;
-    justify-content:flex-end;
-  }}
-  .m-btn {{
-    border:none;
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-weight: 900;
-    cursor:pointer;
-  }}
+  .modal-actions {{ display:flex; gap:10px; justify-content:flex-end; }}
+  .m-btn {{ border:none; border-radius: 12px; padding: 10px 14px; font-weight: 900; cursor:pointer; }}
   .m-btn.cancel {{ background: #2a2f3a; color: #fff; }}
-  .m-btn.ok {{
-    background: linear-gradient(90deg,#ff9800,#ff5722);
-    color:#111;
-  }}
+  .m-btn.ok {{ background: linear-gradient(90deg,#ff9800,#ff5722); color:#111; }}
 </style>
 
 <script>
@@ -447,5 +385,5 @@ ads_html = f"""
 </script>
 """
 
-# 모바일 세로형에서도 3개 전부 보이도록 높이 넉넉히
+# ✅ 모바일에서도 광고 3개가 다 보이도록 충분한 높이
 components.html(ads_html, height=640, scrolling=False)
